@@ -11,18 +11,20 @@
           
             margin-top: 50px; 
             margin-left: 100px;/* Adjust as needed */
+            font-family: 'Courier New', Courier, monospace;
         }
 
         #loginBtn,
         #registerBtn {
-            background-color: #BED7DC;
-            color: #4273b3;
+            background-color:#3f6381cb;
+            color: white;
             border: none;
             padding: 10px 20px;
             margin: 10px; /* Adjust spacing between buttons */
             border-radius: 4px;
             cursor: pointer;
             transition: background-color 0.3s;
+            font-family: 'Courier New', Courier, monospace;
             
         }
 
@@ -31,6 +33,7 @@
             background-color: #0056b3;
             color: white;
         }
+        
     </style>
 </head>
 <body>
@@ -156,20 +159,7 @@
     {% endif %}
     {% endwith %}
 {% endif %}
-<div id="loginPopup" class="popup">
-    <div class="popup-content">
-        <span class="close">&times;</span>
-        <h2>Login</h2>
-        <form id="loginForm" action="/login" method="post">
-            <label for="loginUsername">Username:</label>
-            <input type="text" id="loginUsername" name="username" required>
-            <label for="loginPassword">Password:</label>
-            <input type="password" id="loginPassword" name="password" required>
-            <button type="submit">Login</button>
-            <a href="#" id="forgotPasswordLink">Forgot Password?</a>
-        </form>
-    </div>
-</div>
+
 <div id="registerPopup" class="popup">
     <div class="popup-content">
         <span class="close">&times;</span>
@@ -187,21 +177,49 @@
         </form>
     </div>
 </div>
-
-
-<div id="forgotPasswordPopup" class="popup">
+<div id="loginPopup" class="popup">
     <div class="popup-content">
         <span class="close">&times;</span>
-        <h2>Update Password</h2>
-        <form id="forgotPasswordForm" action="/update-password" method="post">
-            <label for="forgotPasswordEmail">Email:</label>
-            <input type="email" id="forgotPasswordEmail" name="email" required>
-            <label for="newPassword">New Password:</label>
-            <input type="password" id="newPassword" name="password" required>
-            <button type="submit">Update Password</button>
+        <h2>Login</h2>
+        <form id="loginForm" action="/login" method="post">
+            <label for="loginUsername">Username:</label>
+            <input type="text" id="loginUsername" name="username" required>
+            <label for="loginPassword">Password:</label>
+            <input type="password" id="loginPassword" name="password" required>
+            <button type="submit">Login</button>
+            <a href="#" id="forgotPasswordLink">Forgot Password?</a>
         </form>
     </div>
 </div>
+
+<!-- Forgot Password Popup -->
+<div id="forgotPasswordPopup" class="popup">
+    <div class="popup-content">
+        <span class="close">&times;</span>
+        <h2>Forgot Password</h2>
+        <form id="forgotPasswordForm" action="/forgot-password" method="post">
+            <label for="forgotPasswordEmail">Email:</label>
+            <input type="email" id="forgotPasswordEmail" name="email" required>
+            <button type="submit">Send Reset Link</button>
+        </form>
+    </div>
+</div>
+
+<!-- Reset Password Page -->
+{% if request.endpoint == 'reset_password' %}
+<div id="resetPasswordPage">
+    <h2>Reset Password</h2>
+    <form action="/update-password" method="post">
+        <input type="hidden" name="token" value="{{ token }}">
+        <label for="resetPasswordEmail">Email:</label>
+        <input type="email" id="resetPasswordEmail" name="email" required>
+        <label for="newPassword">New Password:</label>
+        <input type="password" id="newPassword" name="password" required>
+        <button type="submit">Reset Password</button>
+    </form>
+</div>
+{% endif %}
+
     
     <footer class="footer">
         <h4>&copy; 2024 Graphics Studio. All rights reserved.</h4>
@@ -312,6 +330,15 @@
         };
     });
 </script>
-    
+<script>
+    document.getElementById('forgotPasswordLink').onclick = function() {
+        document.getElementById('forgotPasswordPopup').style.display = 'block';
+    };
+    document.querySelectorAll('.close').forEach(function(closeBtn) {
+        closeBtn.onclick = function() {
+            this.parentElement.parentElement.style.display = 'none';
+        };
+    });
+    </script> 
 </body>
 </html>

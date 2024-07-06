@@ -8,11 +8,12 @@ body {
 
 /* Navbar Styles */
 .navbar {
-    background-color: #4273b3;
+    background-color: #3f6381;
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 .navbar .logo {
@@ -23,13 +24,14 @@ body {
 
 .navbar .nav-links button {
     background-color: #BED7DC;
-    color: #4273b3;
+    color: #3f6381;
     border: none;
     padding: 10px 20px;
     margin-left: 10px;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 .navbar .nav-links button:hover {
@@ -52,13 +54,13 @@ h1 {
     text-align: center;
     margin-bottom: 20px;
     font-family: 'Courier New', Courier, monospace;
-    color: #638aa9;
+    color:#3f6381;
 }
 p{
     text-align: center;
     margin-bottom: 0px;
     font-family: 'Courier New', Courier, monospace;
-    color: #638aa9;
+    color: #3f6381;
     font-size: large;
    
     font-weight: 600;
@@ -68,7 +70,7 @@ p{
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    background-color: #638aa9;
+    background-color:#3f6381;
 }
 
 .navbar-left {
@@ -116,7 +118,7 @@ p{
 .manipulation-options .slider-container {
     text-align: center;
     margin-bottom: 20px;
-    color: #638aa9;
+    color: #3f6381;
     font-weight: 550;
 }
 
@@ -167,14 +169,14 @@ img {
 .placeholder-text {
     margin-top: 8px;
     font-size: 16px;
-    color:  #638aa9;
+    color: #3f6381;
     font-weight: 400;
 }
 
 /* File Upload Styles */
 .custom-file-upload {
     display: inline-block;
-    background-color: #638aa9;
+    background-color: #3f6381e8;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -190,7 +192,7 @@ img {
 
 /* Upload Button Styles */
 #uploadButton {
-    background-color:  #638aa9;
+    background-color:  #3f6381e8;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -222,7 +224,7 @@ img {
 
 /* Footer Styles */
 .footer {
-    background-color:  #638aa9;
+    background-color: #3f6381;
     color: white;
     text-align: center;
     padding: 10px 0;
@@ -245,7 +247,8 @@ img {
 }
 
 .popup-content {
-    background-color: #fefefe;
+    background-color: #B3C8CF;
+    color: #3f6381;
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
@@ -253,10 +256,11 @@ img {
     max-width: 400px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    font-family: 'Courier New', Courier, monospace;
 }
 
 .close {
-    color: #aaa;
+    color: white;
     float: right;
     font-size: 28px;
     font-weight: bold;
@@ -278,20 +282,21 @@ img {
 .popup-content form label {
     margin-bottom: 10px;
     font-size: 16px;
-    color: #4273b3;
+    color:#3f6381;
     font-weight: bold;
 }
 
 .popup-content form input {
     margin-bottom: 15px;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 2px solid white;
+    background-color: #B3C8CF;
     border-radius: 4px;
     font-size: 16px;
 }
 
 .popup-content form button {
-    background-color: #4273b3;
+    background-color: #3f6381;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -314,7 +319,7 @@ img {
 }
 /* Link Styles */
 #forgotPasswordLink {
-    color: #4273b3;
+    color: #3f6381;
     text-decoration: none;
     margin-top: 10px;
     display: block;

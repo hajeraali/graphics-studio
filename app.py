@@ -1,11 +1,12 @@
 from flask import Flask, request, render_template, send_from_directory, jsonify, redirect, url_for, flash, session
-import os
-from main import process_image
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
-from sqlalchemy import text
 from flask_migrate import Migrate
-
+from flask_mail import Mail, Message
+import os
+from main import process_image
+import random
+import string
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
@@ -16,11 +17,17 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:123@localhost/gra
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'your_secret_key'
 
-# Initialize SQLAlchemy, Bcrypt, Migrate, and Mail
+# Email configuration
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'itsmeeyayy@gmail.com'
+app.config['MAIL_PASSWORD'] = 'cdzp rgqb yuot yugr'
+mail = Mail(app)
+
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 migrate = Migrate(app, db)
-
 
 # Models
 class User(db.Model):
@@ -30,6 +37,7 @@ class User(db.Model):
     username = db.Column(db.String(50), unique=True, nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
+    reset_token = db.Column(db.String(100), nullable=True)  # New field for reset token
     login_count = db.Column(db.Integer, default=0)
 
     def __init__(self, username, email, password):
@@ -52,9 +60,16 @@ class User(db.Model):
         self.login_count += 1
         db.session.commit()
 
-  
+    def generate_reset_token(self):
+        token = ''.join(random.choices(string.ascii_letters + string.digits, k=50))
+        self.reset_token = token
+        db.session.commit()
+        return token
 
-    
+    def clear_reset_token(self):
+        self.reset_token = None
+        db.session.commit()
+
 class Admin(db.Model):
     __tablename__ = 'admin'
 
@@ -84,7 +99,6 @@ def index():
         return render_template('index.html', logged_in=True)
     else:
         return render_template('index.html', logged_in=False)
-
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if 'image' not in request.files:
@@ -180,40 +194,48 @@ def logout():
 def update_password():
     email = request.form.get('email')
     new_password = request.form.get('password')
+    confirm_password = request.form.get('confirm_password')
+    token = request.form.get('token')
 
-    user = User.query.filter_by(email=email).first()
+    if new_password != confirm_password:
+        flash('Passwords do not match.', 'error')
+        return redirect(url_for('reset_password', token=token))
+
+    user = User.query.filter_by(email=email, reset_token=token).first()
     if user:
         user.password_hash = bcrypt.generate_password_hash(new_password).decode('utf-8')
+        user.clear_reset_token()
         db.session.commit()
         flash('Password updated successfully.', 'success')
     else:
-        flash('User not found.', 'error')
+        flash('Invalid or expired reset link.', 'error')
 
     return redirect(url_for('index'))
 
-@app.route('/delete-account/<int:user_id>', methods=['POST'])
-def delete_account(user_id):
-    user = User.query.get(user_id)
+@app.route('/forgot-password', methods=['POST'])
+def forgot_password():
+    email = request.form.get('email')
+    user = User.query.filter_by(email=email).first()
     if user:
-        db.session.delete(user)
-        db.session.commit()
-        flash('Account deleted successfully.')
+        token = user.generate_reset_token()
+        reset_link = url_for('reset_password', token=token, _external=True)
+        msg = Message('Password Reset Request', sender='your_email@gmail.com', recipients=[email])
+        msg.body = f'Please click the following link to reset your password: {reset_link}'
+        mail.send(msg)
+        flash('A password reset link has been sent to your email.', 'success')
     else:
-        flash('User not found.')
+        flash('Email not found.', 'error')
 
     return redirect(url_for('index'))
 
-
-@app.route('/test-db')
-def test_db_connection():
-    try:
-        result = db.session.execute(text('SELECT 1'))
-        if result.scalar() == 1:
-            return 'Database connection successful!'
-        else:
-            return 'Database connection failed.'
-    except Exception as e:
-        return f'Database connection failed: {str(e)}'
+@app.route('/reset-password/<token>')
+def reset_password(token):
+    user = User.query.filter_by(reset_token=token).first()
+    if user:
+        return render_template('reset_password.html', token=token)
+    else:
+        flash('Invalid or expired reset link.', 'error')
+        return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True)

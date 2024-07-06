@@ -1,13 +1,10 @@
- from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
-from flask_migrate import Migrate
-from flask import Flask
+import random
+import string
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
-
-from sqlalchemy import Column, Integer
-from sqlalchemy.orm import relationship
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -16,19 +13,13 @@ class User(db.Model):
     username = db.Column(db.String(50), unique=True, nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
+    reset_token = db.Column(db.String(100), nullable=True)  # New field for reset token
     login_count = db.Column(db.Integer, default=0)
 
     def __init__(self, username, email, password):
         self.username = username
         self.email = email
         self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
-
-    # Other methods (find_by_username, find_by_email, check_password) remain the same
-
-    def increment_login_count(self):
-        self.login_count += 1
-        db.session.commit()
-
 
     @staticmethod
     def find_by_username(username):
@@ -39,8 +30,22 @@ class User(db.Model):
         return User.query.filter_by(email=email).first()
 
     def check_password(self, password):
-        return bcrypt.check_password_hash(self.password, password)
-  
+        return bcrypt.check_password_hash(self.password_hash, password)
+
+    def increment_login_count(self):
+        self.login_count += 1
+        db.session.commit()
+
+    def generate_reset_token(self):
+        token = ''.join(random.choices(string.ascii_letters + string.digits, k=50))
+        self.reset_token = token
+        db.session.commit()
+        return token
+
+    def clear_reset_token(self):
+        self.reset_token = None
+        db.session.commit()
+
 
    
 class Admin(db.Model):
