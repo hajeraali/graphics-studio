@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Processing</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        /* Centered login and register buttons */
+        .login-register {
+          
+            margin-top: 50px; 
+            margin-left: 100px;/* Adjust as needed */
+        }
+
+        #loginBtn,
+        #registerBtn {
+            background-color: #BED7DC;
+            color: #4273b3;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px; /* Adjust spacing between buttons */
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            
+        }
+
+        #loginBtn:hover,
+        #registerBtn:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-left">
+            <div class="logo">
+               
+            </div>
+            <a href="/" class="nav-link"> &nbsp; &nbsp;Home</a>
+            <!-- Add more links here if needed -->
+        </div>
+        <div class="nav-links">
+            {% if logged_in %}
+                <form action="/logout" method="GET">
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
+            {% else %}
+                <!-- No buttons in navbar when not logged in -->
+            {% endif %}
+        </div>
+    </nav>
+   
+   
+    <h1> ⟢ Graphics Studio ⟢</h1>
+<p>Your Canvas, Your Rules. </p>
+
+{% if logged_in %}
+    <div class="container">
+        <div class="main-content">
+            <div class="manipulation-options">
+                <div class="slider-container">
+                    <br><br><br><br>
+                    <label for="blurSlider">Blur:</label>
+                    <input type="range" id="blurSlider" min="1" max="21" step="2" value="1"> <br>
+                    <label for="contrastSlider">Contrast:</label>
+                    <input type="range" id="contrastSlider" min="1" max="3" step="0.1" value="1"> <br>
+                    <label for="sharpenSlider">Sharpen:</label>
+                    <input type="range" id="sharpenSlider" min="1" max="21" step="2" value="1"> <br>
+                    <label for="invertSlider">Invert: </label>
+                    <input type="range" id="invertSlider" min="1" max="21" step="0.1" value="1">
+                    <!-- Checkbox for white area detection -->
+                    <label for="detectWhiteCheckbox">Detect White:</label>
+                    <input type="checkbox" id="detectWhiteCheckbox">
+                    <label for="detectColor">Detect Color:</label>
+                    <input type="color" id="detectColor" value="">
+                </div>
+            </div>
+            <div class="image-preview">
+                <div class="image-container">
+                    <div class="image-wrapper">
+                        <div class="image-placeholder" id="originalImagePlaceholder">
+                            <div class="placeholder-icon">📷</div>
+                            <div class="placeholder-text">Original Image</div>
+                        </div>
+                        <img id="originalImage" src="" alt="">
+                    </div>
+                    <div class="image-wrapper">
+                        <div class="image-placeholder" id="processedImagePlaceholder">
+                            <div class="placeholder-icon">📷</div>
+                            <div class="placeholder-text">Processing...</div>
+                        </div>
+                        <img id="processedImage" src="" alt="">
+                    </div>
+                </div> &nbsp; &nbsp; &nbsp; <br><br><br><br>
+                <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data" style="margin-top: 10px;">
+                    <div class="upload-section">
+                        <label for="imageInput" class="custom-file-upload">
+                            Select File
+                        </label>
+                        <input type="file" name="image" id="imageInput" accept="image/*" style="display: none;">
+                    </div>
+                    <button type="submit" id="uploadButton">Upload</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+    {% for category, message in messages %}
+        <div id="flashMessage" class="flash-message flash-{{ category }}">
+            <span class="close-btn">&times;</span>
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+{% endwith %}
+
+
+
+
+
+    <!-- Footer -->
+   
+
+    {% else %}
+    <br><br><br>
+    <!-- Login/Register Section -->
+    <p>Explore our image manipulation tools and other functionalities.</p>
+    
+    
+    
+
+    <p>Please login or register to access more features.</p> 
+    <div class="login-register"></div>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button id="loginBtn">Login</button>
+        <button id="registerBtn">Register</button>
+        <br><br><br><br> <br><br><br><br><br>
+    </div>
+  
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div id="flashMessage" class="flash-message flash-{{ category }}">
+                <span class="close-btn">&times;</span>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+{% endif %}
+<div id="loginPopup" class="popup">
+    <div class="popup-content">
+        <span class="close">&times;</span>
+        <h2>Login</h2>
+        <form id="loginForm" action="/login" method="post">
+            <label for="loginUsername">Username:</label>
+            <input type="text" id="loginUsername" name="username" required>
+            <label for="loginPassword">Password:</label>
+            <input type="password" id="loginPassword" name="password" required>
+            <button type="submit">Login</button>
+            <a href="#" id="forgotPasswordLink">Forgot Password?</a>
+        </form>
+    </div>
+</div>
+<div id="registerPopup" class="popup">
+    <div class="popup-content">
+        <span class="close">&times;</span>
+        <h2>Register</h2>
+        <form id="registerForm" action="/register" method="post">
+            <label for="registerUsername">Username:</label>
+            <input type="text" id="registerUsername" name="username" required>
+            <label for="registerEmail">Email:</label>
+            <input type="email" id="registerEmail" name="email" required>
+            <label for="registerPassword">Password:</label>
+            <input type="password" id="registerPassword" name="password" required>
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" id="confirmPassword" name="confirm_password" required>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+</div>
+
+
+<div id="forgotPasswordPopup" class="popup">
+    <div class="popup-content">
+        <span class="close">&times;</span>
+        <h2>Update Password</h2>
+        <form id="forgotPasswordForm" action="/update-password" method="post">
+            <label for="forgotPasswordEmail">Email:</label>
+            <input type="email" id="forgotPasswordEmail" name="email" required>
+            <label for="newPassword">New Password:</label>
+            <input type="password" id="newPassword" name="password" required>
+            <button type="submit">Update Password</button>
+        </form>
+    </div>
+</div>
+    
+    <footer class="footer">
+        <h4>&copy; 2024 Graphics Studio. All rights reserved.</h4>
+    </footer>
+    <script src="{{ url_for('static', filename='2.js') }}"></script>
+    <script>
+        // Popup handling script
+        document.addEventListener('DOMContentLoaded', function() {
+            var loginBtn = document.getElementById('loginBtn');
+            var registerBtn = document.getElementById('registerBtn');
+            var forgotPasswordLink = document.getElementById('forgotPasswordLink');
+            var loginPopup = document.getElementById('loginPopup');
+            var registerPopup = document.getElementById('registerPopup');
+            var forgotPasswordPopup = document.getElementById('forgotPasswordPopup');
+            var closeBtns = document.querySelectorAll('.close');
+
+
+            loginBtn.onclick = function() {
+                loginPopup.style.display = 'block';
+            }
+
+
+            registerBtn.onclick = function() {
+                registerPopup.style.display = 'block';
+            }
+
+
+            forgotPasswordLink.onclick = function(event) {
+                event.preventDefault();
+                loginPopup.style.display = 'none';
+                forgotPasswordPopup.style.display = 'block';
+            }
+
+
+            closeBtns.forEach(function(btn) {
+                btn.onclick = function() {
+                    loginPopup.style.display = 'none';
+                    registerPopup.style.display = 'none';
+                    forgotPasswordPopup.style.display = 'none';
+                }
+            });
+
+
+            window.onclick = function(event) {
+                if (event.target == loginPopup) {
+                    loginPopup.style.display = 'none';
+                }
+                if (event.target == registerPopup) {
+                    registerPopup.style.display = 'none';
+                }
+                if (event.target == forgotPasswordPopup) {
+                    forgotPasswordPopup.style.display = 'none';
+                }
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var flashMessage = document.getElementById('flashMessage');
+            if (flashMessage) {
+                flashMessage.style.display = 'block'; // Show the flash message
+               
+                // Auto-hide after 5 seconds
+                setTimeout(function() {
+                    flashMessage.style.display = 'none';
+                }, 5000);
+               
+                // Close button functionality
+                var closeBtn = flashMessage.querySelector('.close-btn');
+                closeBtn.onclick = function() {
+                    flashMessage.style.display = 'none';
+                }
+            }
+        });
+        
+    </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var registerForm = document.getElementById('registerForm');
+        var registerPassword = document.getElementById('registerPassword');
+        var confirmPassword = document.getElementById('confirmPassword');
+    
+        registerForm.onsubmit = function(event) {
+            if (registerPassword.value !== confirmPassword.value) {
+                event.preventDefault();
+                // Flash message instead of alert
+                var flashMessage = document.createElement('div');
+                flashMessage.classList.add('flash-message', 'flash-error'); // Ensure your CSS has styles for .flash-message and .flash-error
+                flashMessage.innerHTML = 'Passwords do not match.';
+                flashMessage.id = 'flashMessage'; // Make sure to set an ID if needed for further styling or interaction
+                flashMessage.style.display = 'block'; // Show the flash message
+                document.body.appendChild(flashMessage);
+
+                // Auto-hide after 5 seconds
+                setTimeout(function() {
+                    flashMessage.style.display = 'none';
+                }, 5000);
+                
+                // Optional: Add a close button
+                var closeBtn = document.createElement('span');
+                closeBtn.classList.add('close-btn');
+                closeBtn.innerHTML = '&times;';
+                closeBtn.onclick = function() {
+                    flashMessage.style.display = 'none';
+                };
+                flashMessage.appendChild(closeBtn);
+            }
+        };
+    });
+</script>
+    
+</body>
+</html>

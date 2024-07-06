@@ -1,0 +1,359 @@
+/* Global Styles */
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #B3C8CF;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: #4273b3;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar .logo {
+    color: white;
+    font-size: 24px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.navbar .nav-links button {
+    background-color: #BED7DC;
+    color: #4273b3;
+    border: none;
+    padding: 10px 20px;
+    margin-left: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.navbar .nav-links button:hover {
+    background-color: #0056b3;
+    color: white;
+}
+
+/* Container Styles */
+.container {
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 30px;
+    background-color: #BED7DC;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: 'Courier New', Courier, monospace;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'Courier New', Courier, monospace;
+    color: #638aa9;
+}
+p{
+    text-align: center;
+    margin-bottom: 0px;
+    font-family: 'Courier New', Courier, monospace;
+    color: #638aa9;
+    font-size: large;
+   
+    font-weight: 600;
+}
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #638aa9;
+}
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 40px; /* Adjust the size as needed */
+    margin-right: 15px;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    margin-right: 15px;
+    font-size: 16px;
+}
+
+.nav-link:hover {
+    text-decoration: underline;
+}
+
+.nav-links form,
+.nav-links button {
+    margin-left: 10px;
+}
+/* Centered login and register buttons */
+
+/* Centered login and register buttons */
+
+
+
+
+/* Main Content Layout */
+.main-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.manipulation-options {
+    flex: 0 0 30%;
+}
+
+.manipulation-options .slider-container {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #638aa9;
+    font-weight: 550;
+}
+
+.manipulation-options label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Image Preview */
+.image-preview {
+    flex: 0 0 65%;
+}
+
+.image-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.image-wrapper {
+    flex: 0 0 48%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+/* Placeholder Styles */
+.image-placeholder {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #BED7DC;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.placeholder-icon {
+    font-size: 36px;
+}
+
+.placeholder-text {
+    margin-top: 8px;
+    font-size: 16px;
+    color:  #638aa9;
+    font-weight: 400;
+}
+
+/* File Upload Styles */
+.custom-file-upload {
+    display: inline-block;
+    background-color: #638aa9;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.custom-file-upload:hover {
+    background-color: #0056b3;
+}
+
+/* Upload Button Styles */
+#uploadButton {
+    background-color:  #638aa9;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#uploadButton:hover {
+    background-color: #0056b3;
+}
+
+/* Ensure buttons are side by side */
+.upload-section {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+/* Adjust processed image position */
+.image-wrapper {
+    position: relative;
+}
+
+#processedImage {
+    position: relative;
+    left: 20px;
+}
+
+/* Footer Styles */
+.footer {
+    background-color:  #638aa9;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+   
+    width: 100%;
+    bottom: 0;
+}
+
+/* Popup Styles */
+.popup {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.popup-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 400px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Form Styles */
+.popup-content form {
+    display: flex;
+    flex-direction: column;
+}
+
+.popup-content form label {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #4273b3;
+    font-weight: bold;
+}
+
+.popup-content form input {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.popup-content form button {
+    background-color: #4273b3;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.popup-content form button:hover {
+    background-color: #0056b3;
+}
+.logout-btn{
+    background-color: #4273b3;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+/* Link Styles */
+#forgotPasswordLink {
+    color: #4273b3;
+    text-decoration: none;
+    margin-top: 10px;
+    display: block;
+    text-align: right;
+}
+
+#forgotPasswordLink:hover {
+    text-decoration: underline;
+}
+.flash-message {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 300px;
+    text-align: center;
+    border-radius: 5px;
+    padding: 10px;
+    display: none; /* Initially hidden */
+}
+
+.flash-success {
+    background-color: #4CAF50; /* Green */
+    color: white;
+}
+
+.flash-error {
+    background-color: #f44336; /* Red */
+    color: white;
+}
+
+/* Add a close button */
+.flash-message .close-btn {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}

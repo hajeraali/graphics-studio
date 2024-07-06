@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphics Studio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-left">
+            <div class="logo">
+                <!-- Your logo or brand -->
+            </div>
+            <a href="/" class="nav-link">Home</a>
+            <!-- Add more links here if needed -->
+        </div>
+        <div class="nav-links">
+            <form action="/logout" method="GET">
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        </div>
+    </nav>
+   
+    <!-- Main Content -->
+    <div class="container">
+        <h1>Welcome to Graphics Studio</h1>
+        <p>Your Canvas, Your Rules</p>
+        <!-- Your main content here -->
+    </div>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div id="flashMessage" class="flash-message flash-{{ category }}">
+                    <span class="close-btn">&times;</span>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <!-- Footer -->
+    <footer class="footer">
+        <h4>&copy; 2024 Graphics Studio. All rights reserved.</h4>
+    </footer>
+
+    <!-- JavaScript files -->
+    <script src="{{ url_for('static', filename='2.js') }}"></script>
+    <script>
+        // JavaScript code if needed
+    </script>
+</body>
+</html>
