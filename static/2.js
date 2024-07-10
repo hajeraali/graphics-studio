@@ -21,11 +21,16 @@ document.addEventListener('DOMContentLoaded', function() {
             processImage('detect_white', 0); // Pass a dummy value, as threshold value is not used
         }
     });
+
     document.getElementById('detectColor').addEventListener('input', function() {
         const colorValue = this.value;
         processImage('detect_color', colorValue);
     });
-    
+
+    // Event listener for object detection button
+    document.getElementById('detectObjectsButton').addEventListener('click', function() {
+        processImage('object_detection', 0); // Pass a dummy value
+    });
 
     // Function to process image based on operation and value
     function processImage(operation, value) {

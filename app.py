@@ -99,6 +99,7 @@ def index():
         return render_template('index.html', logged_in=True)
     else:
         return render_template('index.html', logged_in=False)
+
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if 'image' not in request.files:

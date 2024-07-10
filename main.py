@@ -1,21 +1,55 @@
 import cv2
 import os
 import numpy as np
+import tensorflow as tf
+
+# Load the TensorFlow model
+MODEL_DIR = r"D:\haj\ssd_mobilenet_v2_320x320_coco17_tpu-8\saved_model"
+model = tf.saved_model.load(str(MODEL_DIR))
+
+def load_image_into_numpy_array(path):
+    return np.array(cv2.imread(path))
+
+def detect_objects(image_np):
+    input_tensor = tf.convert_to_tensor(image_np)
+    input_tensor = input_tensor[tf.newaxis, ...]
+    detections = model(input_tensor)
+    
+    return detections
 
 def process_image(filepath, operation, value, output_folder):
     image = cv2.imread(filepath)
-    
-    if operation == 'blur':
+
+    if operation == 'object_detection':
+        image_np = load_image_into_numpy_array(filepath)
+        detections = detect_objects(image_np)
+
+        # Extract detection information
+        detection_boxes = detections['detection_boxes'][0].numpy()
+        detection_scores = detections['detection_scores'][0].numpy()
+
+        height, width, _ = image.shape
+        confidence_threshold = 0.5  # Set a confidence threshold
+
+        for i in range(len(detection_scores)):
+            if detection_scores[i] >= confidence_threshold:
+                ymin, xmin, ymax, xmax = detection_boxes[i]
+                (left, right, top, bottom) = (xmin * width, xmax * width, ymin * height, ymax * height)
+                cv2.rectangle(image, (int(left), int(top)), (int(right), int(bottom)), (0, 255, 0), 2)
+
+        processed_image = image
+
+    elif operation == 'blur':
         ksize = int(value)
         if ksize % 2 == 0:  # Ensure the kernel size is odd
             ksize += 1
         processed_image = cv2.GaussianBlur(image, (ksize, ksize), 0)
-    
+
     elif operation == 'contrast':
         alpha = float(value)
         beta = 1  # You can adjust this value if needed
         processed_image = cv2.convertScaleAbs(image, alpha=alpha, beta=beta)
-    
+
     elif operation == 'sharpen':
         kernel_size = int(value)
         if kernel_size % 2 == 0:
@@ -59,7 +93,7 @@ def process_image(filepath, operation, value, output_folder):
 
     else:
         return None
-    
+
     output_filename = f"{operation}_{os.path.basename(filepath)}"
     output_path = os.path.join(output_folder, output_filename)
     cv2.imwrite(output_path, processed_image)

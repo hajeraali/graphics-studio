@@ -74,12 +74,13 @@
                     <label for="sharpenSlider">Sharpen:</label>
                     <input type="range" id="sharpenSlider" min="1" max="21" step="2" value="1"> <br>
                     <label for="invertSlider">Invert: </label>
-                    <input type="range" id="invertSlider" min="1" max="21" step="0.1" value="1">
+                    <input type="range" id="invertSlider" min="1" max="21" step="0.1" value="1"><br>
                     <!-- Checkbox for white area detection -->
-                    <label for="detectWhiteCheckbox">Detect White:</label>
-                    <input type="checkbox" id="detectWhiteCheckbox">
+                    <input type="checkbox" id="detectWhiteCheckbox"><br>
                     <label for="detectColor">Detect Color:</label>
-                    <input type="color" id="detectColor" value="">
+                    <input type="color" id="detectColor" value=""><br><br>
+                    <button id="detectObjectsButton">Detect Objects</button>
+
                 </div>
             </div>
             <div class="image-preview">
@@ -98,7 +99,7 @@
                         </div>
                         <img id="processedImage" src="" alt="">
                     </div>
-                </div> &nbsp; &nbsp; &nbsp; <br><br><br><br>
+                </div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <br><br><br><br>
                 <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data" style="margin-top: 10px;">
                     <div class="upload-section">
                         <label for="imageInput" class="custom-file-upload">
