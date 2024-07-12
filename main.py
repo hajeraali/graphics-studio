@@ -7,6 +7,19 @@ import tensorflow as tf
 MODEL_DIR = r"D:\haj\ssd_mobilenet_v2_320x320_coco17_tpu-8\saved_model"
 model = tf.saved_model.load(str(MODEL_DIR))
 
+# COCO dataset class names
+COCO_CLASSES = [
+    'person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus', 'train', 'truck', 'boat', 'traffic light',
+    'fire hydrant', 'stop sign', 'parking meter', 'bench', 'bird', 'cat', 'dog', 'horse', 'sheep', 'cow',
+    'elephant', 'bear', 'zebra', 'giraffe', 'backpack', 'umbrella', 'handbag', 'tie', 'suitcase', 'frisbee',
+    'skis', 'snowboard', 'sports ball', 'kite', 'baseball bat', 'baseball glove', 'skateboard', 'surfboard',
+    'tennis racket', 'bottle', 'wine glass', 'cup', 'fork', 'knife', 'spoon', 'bowl', 'banana', 'apple',
+    'sandwich', 'orange', 'broccoli', 'carrot', 'hot dog', 'pizza', 'donut', 'cake', 'chair', 'couch',
+    'potted plant', 'bed', 'dining table', 'toilet', 'TV', 'laptop', 'mouse', 'remote', 'keyboard', 'cell phone',
+    'microwave', 'oven', 'toaster', 'sink', 'refrigerator', 'book', 'clock', 'vase', 'scissors', 'teddy bear',
+    'hair drier', 'toothbrush'
+]
+
 def load_image_into_numpy_array(path):
     return np.array(cv2.imread(path))
 
@@ -27,6 +40,7 @@ def process_image(filepath, operation, value, output_folder):
         # Extract detection information
         detection_boxes = detections['detection_boxes'][0].numpy()
         detection_scores = detections['detection_scores'][0].numpy()
+        detection_classes = detections['detection_classes'][0].numpy().astype(np.int32)
 
         height, width, _ = image.shape
         confidence_threshold = 0.5  # Set a confidence threshold
@@ -35,7 +49,10 @@ def process_image(filepath, operation, value, output_folder):
             if detection_scores[i] >= confidence_threshold:
                 ymin, xmin, ymax, xmax = detection_boxes[i]
                 (left, right, top, bottom) = (xmin * width, xmax * width, ymin * height, ymax * height)
+                class_id = detection_classes[i]
+                label = COCO_CLASSES[class_id - 1]  # Adjust for zero-indexing
                 cv2.rectangle(image, (int(left), int(top)), (int(right), int(bottom)), (0, 255, 0), 2)
+                cv2.putText(image, label, (int(left), int(top) - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
 
         processed_image = image
 
