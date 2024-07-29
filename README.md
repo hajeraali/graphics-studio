@@ -1,0 +1,1 @@
+Developed an Image processing web app where users can securely login and perform various image manipulation operations such as blur, sharpen, change contrast and brightness, detect colors. The project also includes Object Detection.
